@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,17 +184,17 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/bundle-url.js"}],"reset.css":[function(require,module,exports) {
+},{"./bundle-url":"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/bundle-url.js"}],"reset.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/css-loader.js"}],"global.css":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"global.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/css-loader.js"}],"../../../AppData/Roaming/npm/node_modules/parcel/node_modules/process/browser.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/process/browser.js":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -11289,12 +11289,12 @@ if ( typeof noGlobal === "undefined" ) {
 return jQuery;
 } );
 
-},{"process":"../../../AppData/Roaming/npm/node_modules/parcel/node_modules/process/browser.js"}],"app1.css":[function(require,module,exports) {
+},{"process":"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/process/browser.js"}],"app1.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/css-loader.js"}],"app1.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"app1.js":[function(require,module,exports) {
 "use strict";
 
 var _jquery = _interopRequireDefault(require("jquery"));
@@ -11303,6 +11303,8 @@ require("./app1.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var html = "\n  <section id=\"app1\">\n    <div class=\"output\">\n      <span id=\"number\">100</span>\n    </div>\n    <div class=\"actions\">\n      <button id=\"add\">+</button>\n      <button id=\"minus\">-</button>\n      <button id=\"mul\">*</button>\n      <button id=\"divide\">/</button>\n    </div>\n  </section>\n";
+var $element = (0, _jquery.default)(html).appendTo((0, _jquery.default)('body>.page'));
 var $button1 = (0, _jquery.default)('#add');
 var $button2 = (0, _jquery.default)('#minus');
 var $button3 = (0, _jquery.default)('#mul');
@@ -11339,7 +11341,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/css-loader.js"}],"app2.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"app2.js":[function(require,module,exports) {
 "use strict";
 
 var _jquery = _interopRequireDefault(require("jquery"));
@@ -11348,22 +11350,26 @@ require("./app2.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var html = "\n  <section id=\"app2\">\n    <ol class=\"tab-bar\">\n      <li><span>1111111</span></li>\n      <li><span>2222222</span></li>\n    </ol>\n    <ol class=\"tab-content\">\n      <li>\u5185\u5BB91</li>\n      <li>\u5185\u5BB92</li>\n    </ol>\n  </section>\n";
+var $element = (0, _jquery.default)(html).appendTo((0, _jquery.default)('body>.page'));
 var $tabBar = (0, _jquery.default)('#app2 .tab-bar');
 var $tabContent = (0, _jquery.default)('#app2 .tab-content');
+var index = localStorage.getItem('app2.index') ?? 0;
 $tabBar.on('click', 'li', function (e) {
   var $li = (0, _jquery.default)(e.currentTarget);
+  $li.addClass('selected').siblings().removeClass('selected');
   var index = $li.index();
-  $li.addClass('selected').siblings().removeClass('selected'); // 找到 content 儿子们 第index变为block，他的兄弟姐妹就变成none
+  localStorage.setItem('app2.index', index); // 找到 content 儿子们 第index变为block，他的兄弟姐妹就变成none
 
   $tabContent.children().eq(index).addClass('active').siblings().removeClass('active');
 });
-$tabBar.children().eq(0).trigger('click');
+$tabBar.children().eq(index).trigger('click');
 },{"jquery":"../node_modules/jquery/dist/jquery.js","./app2.css":"app2.css"}],"app3.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/css-loader.js"}],"app3.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"app3.js":[function(require,module,exports) {
 "use strict";
 
 var _jquery = _interopRequireDefault(require("jquery"));
@@ -11372,16 +11378,32 @@ require("./app3.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var html = "\n  <section id=\"app3\">\n    <div class=\"square\"></div>\n  </section>\n";
+var $element = (0, _jquery.default)(html).appendTo((0, _jquery.default)('body>.page'));
 var $square = (0, _jquery.default)('#app3 .square');
+var active = localStorage.getItem('app3.active') === 'yes'; // if (active) {
+//   $square.addClass('active')
+// } else {
+//   $square.removeClass('active')
+// }
+// 等价于下面的
+
+$square.toggleClass('active', active);
 $square.on('click', function () {
-  $square.toggleClass('active');
+  if ($square.hasClass('active')) {
+    $square.removeClass('active');
+    localStorage.setItem('app3.active', 'no');
+  } else {
+    $square.addClass('active');
+    localStorage.setItem('app3.active', 'yes');
+  }
 });
 },{"jquery":"../node_modules/jquery/dist/jquery.js","./app3.css":"app3.css"}],"app4.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/css-loader.js"}],"app4.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"app4.js":[function(require,module,exports) {
 "use strict";
 
 var _jquery = _interopRequireDefault(require("jquery"));
@@ -11390,6 +11412,8 @@ require("./app4.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var html = "\n  <section id=\"app4\">\n    <div class=\"circle\"></div>\n  </section>\n";
+var $element = (0, _jquery.default)(html).appendTo((0, _jquery.default)('body>.page'));
 var $circle = (0, _jquery.default)('#app4 .circle');
 $circle.on('mouseenter', function () {
   $circle.addClass('active');
@@ -11410,7 +11434,7 @@ require("./app2.js");
 require("./app3.js");
 
 require("./app4.js");
-},{"./reset.css":"reset.css","./global.css":"global.css","./app1.js":"app1.js","./app2.js":"app2.js","./app3.js":"app3.js","./app4.js":"app4.js"}],"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./reset.css":"reset.css","./global.css":"global.css","./app1.js":"app1.js","./app2.js":"app2.js","./app3.js":"app3.js","./app4.js":"app4.js"}],"C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -11438,7 +11462,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55851" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "2006" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -11613,5 +11637,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/hmr-runtime.js","main.js"], null)
+},{}]},{},["C:/Users/29744/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js","main.js"], null)
 //# sourceMappingURL=/main.1f19ae8e.js.map
