@@ -1,16 +1,25 @@
 import $ from 'jquery'
 import './app1.css'
 
+const eventBus = $({}) // || $(window)
+
 // 数据相关 都放到 m
 const m = {
   data: {
     n: parseInt(localStorage.getItem('n')),
   },
+  create() {},
+  delete() {},
+  update(data) {
+    Object.assign(m.data, data)
+    eventBus.trigger('m:updated')
+    localStorage.setItem('n', m.data.n)
+  },
+  get() {},
 }
 // 视图相关 都放到 v
 const v = {
   el: null,
-  container: null,
   html: `
     <div>
       <div class="output">
@@ -24,7 +33,7 @@ const v = {
       </div>
     </div>
   `,
-  init(container, n) {
+  init(container) {
     v.el = $(container)
   },
   render(n) {
@@ -40,6 +49,9 @@ const c = {
     v.init(container)
     v.render(m.data.n) // view = render(data)
     c.autoBindEvents()
+    eventBus.on('m:updated', () => {
+      v.render(m.data.n)
+    })
   },
   events: {
     'click #add': 'add',
@@ -48,16 +60,16 @@ const c = {
     'click #divide': 'divide',
   },
   add() {
-    m.data.n += 1
+    m.update({ n: m.data.n + 1 })
   },
   minus() {
-    m.data.n -= 1
+    m.update({ n: m.data.n - 1 })
   },
   mul() {
-    m.data.n *= 2
+    m.update({ n: m.data.n * 2 })
   },
   divide() {
-    m.data.n /= 2
+    m.update({ n: m.data.n / 2 })
   },
   autoBindEvents() {
     for (let key in c.events) {
