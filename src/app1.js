@@ -1,54 +1,73 @@
 import $ from 'jquery'
 import './app1.css'
 
-const html = `
-  <section id="app1">
-    <div class="output">
-      <span id="number">100</span>
+// 数据相关 都放到 m
+const m = {
+  data: {
+    n: parseInt(localStorage.getItem('n')),
+  },
+}
+// 视图相关 都放到 v
+const v = {
+  el: null,
+  container: null,
+  html: `
+    <div>
+      <div class="output">
+        <span id="number">{{n}}</span>
+      </div>
+      <div class="actions">
+        <button id="add">+</button>
+        <button id="minus">-</button>
+        <button id="mul">*</button>
+        <button id="divide">/</button>
+      </div>
     </div>
-    <div class="actions">
-      <button id="add">+</button>
-      <button id="minus">-</button>
-      <button id="mul">*</button>
-      <button id="divide">/</button>
-    </div>
-  </section>
-`
+  `,
+  init(container, n) {
+    v.el = $(container)
+  },
+  render(n) {
+    if (v.el.children.length !== 0) {
+      v.el.empty()
+    }
+    $(v.html.replace('{{n}}', n)).appendTo($(v.el))
+  },
+}
+// 其他都放在 c
+const c = {
+  init(container) {
+    v.init(container)
+    v.render(m.data.n) // view = render(data)
+    c.autoBindEvents()
+  },
+  events: {
+    'click #add': 'add',
+    'click #minus': 'minus',
+    'click #mul': 'mul',
+    'click #divide': 'divide',
+  },
+  add() {
+    m.data.n += 1
+  },
+  minus() {
+    m.data.n -= 1
+  },
+  mul() {
+    m.data.n *= 2
+  },
+  divide() {
+    m.data.n /= 2
+  },
+  autoBindEvents() {
+    for (let key in c.events) {
+      const value = c[c.events[key]]
+      const spaceIndex = key.indexOf(' ')
+      const part1 = key.slice(0, spaceIndex)
+      const part2 = key.slice(spaceIndex + 1)
+      v.el.on(part1, part2, value)
+    }
+  },
+}
 
-const $element = $(html).appendTo($('body>.page'))
-
-const $button1 = $('#add')
-const $button2 = $('#minus')
-const $button3 = $('#mul')
-const $button4 = $('#divide')
-const $number = $('#number')
-const n = localStorage.getItem('n')
-$number.text(n || 100)
-
-$button1.on('click', () => {
-  let n = parseInt($number.text())
-  n += 1
-  localStorage.setItem('n', n)
-  $number.text(n)
-})
-
-$button2.on('click', () => {
-  let n = parseInt($number.text())
-  n -= 1
-  localStorage.setItem('n', n)
-  $number.text(n)
-})
-
-$button3.on('click', () => {
-  let n = parseInt($number.text())
-  n *= 2
-  localStorage.setItem('n', n)
-  $number.text(n)
-})
-
-$button4.on('click', () => {
-  let n = parseInt($number.text())
-  n /= 2
-  localStorage.setItem('n', n)
-  $number.text(n)
-})
+export default c
