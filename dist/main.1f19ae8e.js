@@ -11355,41 +11355,7 @@ function () {
 
 var _default = Model;
 exports.default = _default;
-},{}],"base/View.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _jquery = _interopRequireDefault(require("jquery"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var View =
-/*#__PURE__*/
-_createClass(function View(_ref) {
-  var el = _ref.el,
-      html = _ref.html,
-      render = _ref.render;
-
-  _classCallCheck(this, View);
-
-  this.el = (0, _jquery.default)(el);
-  this.html = html;
-  this.render = render;
-});
-
-var _default = View;
-exports.default = _default;
-},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"app1.js":[function(require,module,exports) {
+},{}],"app1.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11402,8 +11368,6 @@ var _jquery = _interopRequireDefault(require("jquery"));
 require("./app1.css");
 
 var _Model = _interopRequireDefault(require("./base/Model"));
-
-var _View = _interopRequireDefault(require("./base/View"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11421,29 +11385,24 @@ var m = new _Model.default({
   }
 }); // 其他都放在 c
 
-var c = {
-  v: null,
-  initV: function initV() {
-    // 视图相关 都放到 v
-    c.v = new _View.default({
-      el: c.container,
-      html: "\n        <div>\n          <div class=\"output\">\n            <span id=\"number\">{{n}}</span>\n          </div>\n          <div class=\"actions\">\n            <button id=\"add\">+</button>\n            <button id=\"minus\">-</button>\n            <button id=\"mul\">*</button>\n            <button id=\"divide\">/</button>\n          </div>\n        </div>\n      ",
-      render: function render(n) {
-        if (c.v.el.children.length !== 0) {
-          c.v.el.empty();
-        }
+var view = {
+  el: null,
+  html: "\n    <div>\n      <div class=\"output\">\n        <span id=\"number\">{{n}}</span>\n      </div>\n      <div class=\"actions\">\n        <button id=\"add\">+</button>\n        <button id=\"minus\">-</button>\n        <button id=\"mul\">*</button>\n        <button id=\"divide\">/</button>\n      </div>\n    </div>\n  ",
+  init: function init(container) {
+    view.el = (0, _jquery.default)(container);
+    view.render(m.data.n); // view = render(data)
 
-        (0, _jquery.default)(v.html.replace('{{n}}', n)).appendTo((0, _jquery.default)(c.v.el));
-      }
+    view.autoBindEvents();
+    eventBus.on('m:updated', function () {
+      view.render(m.data.n);
     });
   },
-  init: function init(container) {
-    c.container = container;
-    this.initV();
-    c.autoBindEvents();
-    eventBus.on('m:updated', function () {
-      c.v.render(m.data.n);
-    });
+  render: function render(n) {
+    if (view.el.children.length !== 0) {
+      view.el.empty();
+    }
+
+    (0, _jquery.default)(view.html.replace('{{n}}', n)).appendTo((0, _jquery.default)(view.el));
   },
   events: {
     'click #add': 'add',
@@ -11472,18 +11431,18 @@ var c = {
     });
   },
   autoBindEvents: function autoBindEvents() {
-    for (var key in c.events) {
-      var value = c[c.events[key]];
+    for (var key in view.events) {
+      var value = view[view.events[key]];
       var spaceIndex = key.indexOf(' ');
       var part1 = key.slice(0, spaceIndex);
       var part2 = key.slice(spaceIndex + 1);
-      c.v.el.on(part1, part2, value);
+      view.el.on(part1, part2, value);
     }
   }
 };
-var _default = c;
+var _default = view;
 exports.default = _default;
-},{"jquery":"../node_modules/jquery/dist/jquery.js","./app1.css":"app1.css","./base/Model":"base/Model.js","./base/View":"base/View.js"}],"app2.css":[function(require,module,exports) {
+},{"jquery":"../node_modules/jquery/dist/jquery.js","./app1.css":"app1.css","./base/Model":"base/Model.js"}],"app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11514,36 +11473,30 @@ var m = new _Model.default({
   update: function update(data) {
     Object.assign(m.data, data);
     eventBus.trigger('m:updated');
-    localStorage.setItem('index', m.data.index);
+    localStorage.setItem('app2.index', m.data.index);
   }
-}); // 视图相关 都放到 v
+}); // 其他都放在 c
 
-var v = {
+var view = {
   el: null,
   html: function html(index) {
     return "\n    <div>\n      <ol class=\"tab-bar\">\n        <li class='".concat(index === 0 ? 'selected' : '', "' data-index='0'><span>1111111</span></li>\n        <li class='").concat(index === 1 ? 'selected' : '', "' data-index='1'><span>2222222</span></li>\n      </ol>\n      <ol class=\"tab-content\">\n        <li class='").concat(index === 0 ? 'active' : '', "'>\u5185\u5BB91</li>\n        <li class='").concat(index === 1 ? 'active' : '', "'>\u5185\u5BB92</li>\n      </ol>\n    </div>\n  ");
   },
   init: function init(container) {
-    v.el = (0, _jquery.default)(container);
+    view.el = (0, _jquery.default)(container);
+    view.render(m.data.index); // view = render(data)
+
+    view.autoBindEvents();
+    eventBus.on('m:updated', function () {
+      view.render(m.data.index);
+    });
   },
   render: function render(index) {
-    if (v.el.children.length !== 0) {
-      v.el.empty();
+    if (view.el.children.length !== 0) {
+      view.el.empty();
     }
 
-    (0, _jquery.default)(v.html(index)).appendTo((0, _jquery.default)(v.el));
-  }
-}; // 其他都放在 c
-
-var c = {
-  init: function init(container) {
-    v.init(container);
-    v.render(m.data.index); // view = render(data)
-
-    c.autoBindEvents();
-    eventBus.on('m:updated', function () {
-      v.render(m.data.index);
-    });
+    (0, _jquery.default)(view.html(index)).appendTo((0, _jquery.default)(view.el));
   },
   events: {
     'click .tab-bar li': 'x'
@@ -11555,16 +11508,16 @@ var c = {
     });
   },
   autoBindEvents: function autoBindEvents() {
-    for (var key in c.events) {
-      var value = c[c.events[key]];
+    for (var key in view.events) {
+      var value = view[view.events[key]];
       var spaceIndex = key.indexOf(' ');
       var part1 = key.slice(0, spaceIndex);
       var part2 = key.slice(spaceIndex + 1);
-      v.el.on(part1, part2, value);
+      view.el.on(part1, part2, value);
     }
   }
 };
-var _default = c;
+var _default = view;
 exports.default = _default;
 },{"jquery":"../node_modules/jquery/dist/jquery.js","./app2.css":"app2.css","./base/Model":"base/Model.js"}],"app3.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
