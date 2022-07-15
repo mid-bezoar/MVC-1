@@ -1,56 +1,57 @@
 import $ from 'jquery'
 import './app1.css'
+import Model from './base/Model'
+import View from './base/View'
 
 const eventBus = $({}) // || $(window)
 
 // 数据相关 都放到 m
-const m = {
+const m = new Model({
   data: {
     n: parseInt(localStorage.getItem('n')),
   },
-  create() {},
-  delete() {},
   update(data) {
     Object.assign(m.data, data)
     eventBus.trigger('m:updated')
     localStorage.setItem('n', m.data.n)
   },
-  get() {},
-}
-// 视图相关 都放到 v
-const v = {
-  el: null,
-  html: `
-    <div>
-      <div class="output">
-        <span id="number">{{n}}</span>
-      </div>
-      <div class="actions">
-        <button id="add">+</button>
-        <button id="minus">-</button>
-        <button id="mul">*</button>
-        <button id="divide">/</button>
-      </div>
-    </div>
-  `,
-  init(container) {
-    v.el = $(container)
-  },
-  render(n) {
-    if (v.el.children.length !== 0) {
-      v.el.empty()
-    }
-    $(v.html.replace('{{n}}', n)).appendTo($(v.el))
-  },
-}
+})
+
 // 其他都放在 c
 const c = {
+  v: null,
+  initV() {
+    // 视图相关 都放到 v
+    c.v = new View({
+      el: c.container,
+      html: `
+        <div>
+          <div class="output">
+            <span id="number">{{n}}</span>
+          </div>
+          <div class="actions">
+            <button id="add">+</button>
+            <button id="minus">-</button>
+            <button id="mul">*</button>
+            <button id="divide">/</button>
+          </div>
+        </div>
+      `,
+      render(n) {
+        if (c.v.el.children.length !== 0) {
+          c.v.el.empty()
+        }
+        $(v.html.replace('{{n}}', n)).appendTo($(c.v.el))
+      },
+    })
+  },
   init(container) {
-    v.init(container)
-    v.render(m.data.n) // view = render(data)
+    c.container = container
+    this.initV()
+
     c.autoBindEvents()
     eventBus.on('m:updated', () => {
-      v.render(m.data.n)
+      c.v.render(m.data.n)
     })
   },
   events: {
@@ -77,7 +78,7 @@ const c = {
       const spaceIndex = key.indexOf(' ')
       const part1 = key.slice(0, spaceIndex)
       const part2 = key.slice(spaceIndex + 1)
-      v.el.on(part1, part2, value)
+      c.v.el.on(part1, part2, value)
     }
   },
 }

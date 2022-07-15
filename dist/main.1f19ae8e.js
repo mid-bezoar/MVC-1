@@ -11294,7 +11294,102 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/css-loader.js"}],"app1.js":[function(require,module,exports) {
+},{"_css_loader":"../../../AppData/Roaming/npm/node_modules/parcel/src/builtins/css-loader.js"}],"base/Model.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var Model =
+/*#__PURE__*/
+function () {
+  function Model(options) {
+    var _this = this;
+
+    _classCallCheck(this, Model);
+
+    // 下面代码的简化版
+    ;
+    ['data', 'update', 'create', 'delete', 'get'].forEach(function (key) {
+      if (key in options) {
+        _this[key] = options[key];
+      }
+    }); // this.data = options.data
+    // this.update = options.update
+  }
+
+  _createClass(Model, [{
+    key: "create",
+    value: function create() {
+      // ?.可选链
+      // console?.error?.('你还没有实现 create')
+      console && console.error && console.error('你还没有实现 create');
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      console && console.error && console.error('你还没有实现 delete');
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      console && console.error && console.error('你还没有实现 update');
+    }
+  }, {
+    key: "get",
+    value: function get() {
+      console && console.error && console.error('你还没有实现 get');
+    }
+  }]);
+
+  return Model;
+}();
+
+var _default = Model;
+exports.default = _default;
+},{}],"base/View.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _jquery = _interopRequireDefault(require("jquery"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var View =
+/*#__PURE__*/
+_createClass(function View(_ref) {
+  var el = _ref.el,
+      html = _ref.html,
+      render = _ref.render;
+
+  _classCallCheck(this, View);
+
+  this.el = (0, _jquery.default)(el);
+  this.html = html;
+  this.render = render;
+});
+
+var _default = View;
+exports.default = _default;
+},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"app1.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11306,48 +11401,48 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 require("./app1.css");
 
+var _Model = _interopRequireDefault(require("./base/Model"));
+
+var _View = _interopRequireDefault(require("./base/View"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var eventBus = (0, _jquery.default)({}); // || $(window)
 // 数据相关 都放到 m
 
-var m = {
+var m = new _Model.default({
   data: {
     n: parseInt(localStorage.getItem('n'))
   },
-  create: function create() {},
-  delete: function _delete() {},
   update: function update(data) {
     Object.assign(m.data, data);
     eventBus.trigger('m:updated');
     localStorage.setItem('n', m.data.n);
-  },
-  get: function get() {}
-}; // 视图相关 都放到 v
-
-var v = {
-  el: null,
-  html: "\n    <div>\n      <div class=\"output\">\n        <span id=\"number\">{{n}}</span>\n      </div>\n      <div class=\"actions\">\n        <button id=\"add\">+</button>\n        <button id=\"minus\">-</button>\n        <button id=\"mul\">*</button>\n        <button id=\"divide\">/</button>\n      </div>\n    </div>\n  ",
-  init: function init(container) {
-    v.el = (0, _jquery.default)(container);
-  },
-  render: function render(n) {
-    if (v.el.children.length !== 0) {
-      v.el.empty();
-    }
-
-    (0, _jquery.default)(v.html.replace('{{n}}', n)).appendTo((0, _jquery.default)(v.el));
   }
-}; // 其他都放在 c
+}); // 其他都放在 c
 
 var c = {
-  init: function init(container) {
-    v.init(container);
-    v.render(m.data.n); // view = render(data)
+  v: null,
+  initV: function initV() {
+    // 视图相关 都放到 v
+    c.v = new _View.default({
+      el: c.container,
+      html: "\n        <div>\n          <div class=\"output\">\n            <span id=\"number\">{{n}}</span>\n          </div>\n          <div class=\"actions\">\n            <button id=\"add\">+</button>\n            <button id=\"minus\">-</button>\n            <button id=\"mul\">*</button>\n            <button id=\"divide\">/</button>\n          </div>\n        </div>\n      ",
+      render: function render(n) {
+        if (c.v.el.children.length !== 0) {
+          c.v.el.empty();
+        }
 
+        (0, _jquery.default)(v.html.replace('{{n}}', n)).appendTo((0, _jquery.default)(c.v.el));
+      }
+    });
+  },
+  init: function init(container) {
+    c.container = container;
+    this.initV();
     c.autoBindEvents();
     eventBus.on('m:updated', function () {
-      v.render(m.data.n);
+      c.v.render(m.data.n);
     });
   },
   events: {
@@ -11382,13 +11477,13 @@ var c = {
       var spaceIndex = key.indexOf(' ');
       var part1 = key.slice(0, spaceIndex);
       var part2 = key.slice(spaceIndex + 1);
-      v.el.on(part1, part2, value);
+      c.v.el.on(part1, part2, value);
     }
   }
 };
 var _default = c;
 exports.default = _default;
-},{"jquery":"../node_modules/jquery/dist/jquery.js","./app1.css":"app1.css"}],"app2.css":[function(require,module,exports) {
+},{"jquery":"../node_modules/jquery/dist/jquery.js","./app1.css":"app1.css","./base/Model":"base/Model.js","./base/View":"base/View.js"}],"app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11405,24 +11500,23 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 require("./app2.css");
 
+var _Model = _interopRequireDefault(require("./base/Model"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var eventBus = (0, _jquery.default)({}); // || $(window)
 // 数据相关 都放到 m
 
-var m = {
+var m = new _Model.default({
   data: {
     index: parseInt(localStorage.getItem('app2.index')) || 0
   },
-  create: function create() {},
-  delete: function _delete() {},
   update: function update(data) {
     Object.assign(m.data, data);
     eventBus.trigger('m:updated');
     localStorage.setItem('index', m.data.index);
-  },
-  get: function get() {}
-}; // 视图相关 都放到 v
+  }
+}); // 视图相关 都放到 v
 
 var v = {
   el: null,
@@ -11472,7 +11566,7 @@ var c = {
 };
 var _default = c;
 exports.default = _default;
-},{"jquery":"../node_modules/jquery/dist/jquery.js","./app2.css":"app2.css"}],"app3.css":[function(require,module,exports) {
+},{"jquery":"../node_modules/jquery/dist/jquery.js","./app2.css":"app2.css","./base/Model":"base/Model.js"}],"app3.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11576,7 +11670,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53004" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57653" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
