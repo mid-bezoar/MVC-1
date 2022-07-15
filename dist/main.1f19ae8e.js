@@ -11317,8 +11317,8 @@ function () {
     _classCallCheck(this, Model);
 
     // 下面代码的简化版
-    ;
-    ['data', 'update', 'create', 'delete', 'get'].forEach(function (key) {
+    var keys = ['data', 'update', 'create', 'delete', 'get'];
+    keys.forEach(function (key) {
       if (key in options) {
         _this[key] = options[key];
       }

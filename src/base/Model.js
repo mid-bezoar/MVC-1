@@ -1,7 +1,8 @@
 class Model {
   constructor(options) {
     // 下面代码的简化版
-    ;['data', 'update', 'create', 'delete', 'get'].forEach((key) => {
+    const keys = ['data', 'update', 'create', 'delete', 'get']
+    keys.forEach((key) => {
       if (key in options) {
         this[key] = options[key]
       }
